@@ -12,11 +12,41 @@ import { Job } from '../../lib/core/definitions';
 import getJobs from '../../services/api/getJobs';
 
 const useStyles = makeStyles((theme) => ({
+  gridItem: {
+    padding: 10
+  },
   card: {
     padding: 20,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between'
+  },
+  jobTitle: {
+    fontSize: 22,
+    marginBottom: 5
+  },
+  companyWrapper: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  companyLogo: {
+    height: 25,
+    borderRadius: 5,
+    marginRight: 8
+  },
+  companyLink: {
+    color: theme.palette.primary.main,
+    textDecoration: 'none'
+  },
+  hr: {
+    marginTop: 10,
+    marginBottom: 5
+  },
+  timeDetails: {
+    fontSize: 14,
   },
   primaryButton: {
-    background: theme.palette.primary.main,
+    background: theme.palette.primary.dark,
     color: theme.palette.primary.contrastText,
     width: '48%'
   },
@@ -51,15 +81,27 @@ const JobList = () => {
   if(jobs && jobs.length > 0) {
     return (
       <Container maxWidth="md">
-        <Grid container spacing={3}>
+        <Grid container>
           {jobs.map(job => {
             return (
-              <Grid item xs={12} sm={6} md={4}>
-                <Card className={classes.card} key={job.id}>
-                  <h2>{job.title}</h2>
-                  <h3>{job.company.name} - {job.cities.length > 0 ? job.cities[0].name : 'Remote Work'}</h3>
-                  <hr />
-                  <p>Posted: {job.postedAt.toString().split('T')[0]} | Updated: {job.updatedAt.toString().split('T')[0]}</p>
+              <Grid className={classes.gridItem} item xs={12} sm={6} md={4}>
+                <Card className={classes.card} id='jobCard' key={job.id}>
+                  <Box>
+                    <h2 className={classes.jobTitle}>{job.title}</h2>
+                    <Box className={classes.companyWrapper}>
+                      {job.company.logoUrl && 
+                        <img className={classes.companyLogo} src={job.company.logoUrl} />
+                      }
+                      <h4><a className={classes.companyLink} href={job.company.websiteUrl}>{job.company.name}</a> - {job.cities.length > 0 ? job.cities[0].name : 'Remote Work'}</h4>
+                    </Box>
+                    <hr className={classes.hr} />
+                    <p className={classes.timeDetails}>
+                      <strong>Posted:</strong> {job.postedAt.toString().split('T')[0]}
+                    </p>
+                    <p className={classes.timeDetails}>
+                      <strong>Updated:</strong> {job.updatedAt.toString().split('T')[0]}
+                    </p>
+                  </Box>
                   <Box className={classes.buttonWrapper}>
                     <Button 
                       variant='contained' 
