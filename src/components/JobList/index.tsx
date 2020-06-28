@@ -10,12 +10,20 @@ import {
 import { Job } from '../../lib/core/definitions';
 import getJobs from '../../services/api/getJobs';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   card: {
     padding: 20,
     margin: 10
+  },
+  primaryButton: {
+    background: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText
+  },
+  secondaryButton: {
+    background: theme.palette.secondary.main,
+    color: theme.palette.secondary.contrastText
   }
-})
+}))
 
 const JobList = () => {
   const classes = useStyles();
@@ -40,15 +48,28 @@ const JobList = () => {
           return (
             <Card className={classes.card} key={job.id}>
               <h2>{job.title}</h2>
-              <h5>{job.company.name}</h5>
+              <h3>{job.company.name}</h3>
               <hr />
               {job.cities.length > 0 && 
                 <h4>
-                  Location: {job.cities[0].name}, {job.cities[0].country.name}
+                  {job.cities[0].name}, {job.cities[0].country.name}
                 </h4>
               }
-              <p>Posted On: {job.postedAt} | Updated On: {job.updatedAt}</p>
-              <Button href={job.applyUrl}>Apply</Button>
+              <p>Posted: {job.postedAt.toString().split('T')[0]} | Updated: {job.updatedAt.toString().split('T')[0]}</p>
+              <Button 
+                variant='contained' 
+                className={classes.primaryButton}
+                href={job.applyUrl}
+              >
+                  Apply
+              </Button>
+              <Button 
+                variant='contained' 
+                className={classes.secondaryButton}
+                href='#'
+              >
+                  Details
+              </Button>
             </Card>
           )
         })}
